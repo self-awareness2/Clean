@@ -1,5 +1,6 @@
 #pragma once
 #include "DropShadowWidget.h"
+#include "TitleWidget.h"
 class MainWidget :public DropShadowWidget
 {
 	Q_OBJECT
@@ -8,5 +9,6 @@ public:
 protected:
 public slots:
 private:
+	TitleWidget* titleWidget;
 };
 

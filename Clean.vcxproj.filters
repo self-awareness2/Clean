@@ -49,10 +49,8 @@
     <QtMoc Include="TitleWidget.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="PushButton.h">
+    <QtMoc Include="PushButton.h">
       <Filter>Resource Files\Header Files</Filter>
-    </ClInclude>
+    </QtMoc>
   </ItemGroup>
 </Project>
