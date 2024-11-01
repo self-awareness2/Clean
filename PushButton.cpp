@@ -1,5 +1,5 @@
 #include "PushButton.h"
-
+#include <qdebug.h>
 PushButton::PushButton(QWidget* parent)
 	:QPushButton(parent)
 {
@@ -51,7 +51,7 @@ void PushButton::leaveEvent(QEvent*)
 	update();
 }
 
-void PushButton::paintEvent(QPaintEvent*)
+void PushButton::paintEvent(QPaintEvent*) 
 {
 	QPainter painter(this);
 	QPixmap pixmap;

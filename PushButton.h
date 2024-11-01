@@ -11,11 +11,11 @@ public:
     ~PushButton();
     void setPicName(QString picName);
 protected:
-    void enterEvent(QEvent*);
-    void leaveEvent(QEvent*);
-    void mousePressEvent(QMouseEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
-    void paintEvent(QPaintEvent*);
+    void enterEvent(QEvent*) override;
+    void leaveEvent(QEvent*) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void paintEvent(QPaintEvent*) override;
 
 private:
     enum ButtonStatus{NORMAL, ENTER, PRESS, NOSTATUS};

@@ -6,6 +6,7 @@ class MainWidget :public DropShadowWidget
 	Q_OBJECT
 public:
 	MainWidget(QWidget *parent = nullptr);
+	void paintEvent(QPaintEvent* event);
 protected:
 public slots:
 private:
