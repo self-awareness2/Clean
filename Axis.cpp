@@ -65,6 +65,12 @@ bool Axis::home(int homeMethod,double velSwitch)
 	return handleResult(ret, "NMC_EcatStartHome");
 }
 
+bool Axis::side2side(bool direction)
+{	
+	moveTo(direction?distance:-distance, maxV, 0.1, 0.02);
+	return false;
+}
+
 bool Axis::moveTo(long targetPosition, double velocity, double acceleration, double deceleration)
 {
 	if(!isInitialized) return logError("Axis not initialized!");

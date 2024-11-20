@@ -5,30 +5,49 @@
 #include "mtn_lib20_ext.h"
 #include "mtn_lib20_oem.h"
 #include <iostream>
+
+struct AxisStatus
+{
+    bool isBusy;
+    bool isNeg;
+};
+
 class Axis {
 private:
     HAND axisHandle;  // 轴句柄
     HAND devHandle;//控制器句柄
     short axisID;  //轴id
     bool isInitialized;
+    double maxV;
 public:
-    Axis(HAND devHandle,short id) :devHandle(devHandle), axisHandle(id+241), axisID(id), isInitialized(false) {}
+    long distance;
+
+
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="devHandle">设备句柄</param>
+    /// <param name="id">轴id</param>
+    /// <param name="distance">轴负限位到正限位距离</param>
+    Axis(HAND devHandle,short id,long distance) :devHandle(devHandle), axisHandle(id+241), axisID(id), isInitialized(false),distance(distance) {}
 
     // 初始化轴
     bool initialize( );
 
-    // 关闭轴
-    void close();
 
     /// <summary>
     /// 回零
     /// </summary>
     /// <param name="homeMethod">找原点方式</param>
     /// <param name="velSwitch">速度</param>
-    /// <param name="zeroVelocity"></param>
     /// <returns></returns>
     bool home(int homeMethod,double velSwitch);
-    
+
+    /// <summary>
+    /// 由正限位到负限位,由负限位到正限位
+    /// </summary>
+    /// <returns></returns>
+    bool side2side(bool direction);
 
     // 点位运动（绝对位置）
     bool moveTo(long targetPosition, double velocity, double acceleration, double deceleration);
