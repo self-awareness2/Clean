@@ -61,9 +61,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <IncludePath>$(ProjectDir)\includes;$(ProjectDir)\includes\opencv2;$(ProjectDIr)\includes\qxlsx;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <AdditionalDependencies>nmc_lib20.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
@@ -94,7 +100,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWidget.cpp" />
     <ClCompile Include="Axis.cpp" />
-    <ClCompile Include="Control.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="PushButton.cpp" />
     <ClCompile Include="TitleWidget.cpp" />
   </ItemGroup>
@@ -111,7 +117,7 @@
   <ItemGroup>
     <ClInclude Include="Axis.h" />
     <ClInclude Include="IO.h" />
-    <ClInclude Include="Control.h" />
+    <ClInclude Include="Controller.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

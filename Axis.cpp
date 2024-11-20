@@ -1,16 +1,50 @@
 #include "Axis.h"
 
-bool Axis::initialize(HAND devHandle, short axisNo)
+bool Axis::initialize()
 {
 	short ret = NMC_MtOpen(devHandle, axisID, &axisHandle);
 	if (ret == RTN_CMD_SUCCESS)
 	{
 		isInitialized = true;
 		std::cout << "Axis" << axisID << "initialized successfully. \n";
-		return true;
 	}
 	else {
 		printError("NMC_MTOpen", ret);
+		return false;
+	}
+	ret = NMC_MtZeroPos(axisHandle);
+	if (ret == RTN_CMD_SUCCESS) {
+
+	}
+	else {
+		printError("NMC_MtZeroPos", ret);
+		return false;
+	}
+	ret = NMC_MtClrError(axisHandle);
+	if (ret == RTN_CMD_SUCCESS) {
+
+	}
+	else {
+		printError("NMC_MtClrError", ret);
+		return false;
+	}
+	ret = NMC_MtSetStepMode(axisHandle, 0, 1);
+	if (ret == RTN_CMD_SUCCESS) {
+
+	}
+	else {
+		printError("NMC_MtSetStepMode", ret);
+		return false;
+	}
+	ret = NMC_MtSetSvOn(axisHandle);
+	if (ret == RTN_CMD_SUCCESS)
+	{
+		std::cout << "Axis " << axisID << "SvOn successfully. \n";
+		return true;
+	}
+	else
+	{
+		printError("NMC_MtSetSvOn", ret);
 		return false;
 	}
 }
@@ -24,10 +58,10 @@ void Axis::close()
 	}
 }
 
-bool Axis::home(double switchVelocity, double zeroVelocity, double acceleration)
+bool Axis::home(int homeMethod,double velSwitch)
 {
 	if (!isInitialized) return logError("Axis not initialized!");
-	short ret = NMC_EcatStartHome(axisHandle, 1, switchVelocity, zeroVelocity, acceleration, 0);
+	short ret = NMC_EcatStartHome(axisHandle, homeMethod, velSwitch, 1, 0.1, 0);
 	return handleResult(ret, "NMC_EcatStartHome");
 }
 

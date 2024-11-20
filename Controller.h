@@ -9,16 +9,14 @@ private:
 
 	char* myGml;
 public:
-	Controller(short numAxes, short numIo);
+	Controller( );
 
 	bool initalize(short deviceNo);
-
+	~Controller();
 private:
 	void printError(const std::string& functionName, short errorCode) {
 		std::cerr << functionName << " failed with error code: " << errorCode << "\n";
 	}
-
-
 
 };
 

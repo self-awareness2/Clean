@@ -8,24 +8,27 @@
 class Axis {
 private:
     HAND axisHandle;  // 轴句柄
+    HAND devHandle;//控制器句柄
     short axisID;  //轴id
-
     bool isInitialized;
-
-
-
-   
-
 public:
-    Axis(short id) : axisHandle(0), axisID(id), isInitialized(false) {}
+    Axis(HAND devHandle,short id) :devHandle(devHandle), axisHandle(id+241), axisID(id), isInitialized(false) {}
 
     // 初始化轴
-    bool initialize(HAND devHandle, short axisNo);
+    bool initialize( );
 
     // 关闭轴
     void close();
 
-    bool home(double switchVelocity, double zeroVelocity, double acceleration);
+    /// <summary>
+    /// 回零
+    /// </summary>
+    /// <param name="homeMethod">找原点方式</param>
+    /// <param name="velSwitch">速度</param>
+    /// <param name="zeroVelocity"></param>
+    /// <returns></returns>
+    bool home(int homeMethod,double velSwitch);
+    
 
     // 点位运动（绝对位置）
     bool moveTo(long targetPosition, double velocity, double acceleration, double deceleration);
