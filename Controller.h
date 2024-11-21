@@ -1,9 +1,12 @@
 #pragma once
+#include <qobject.h>
+#include <qthread.h>
 #include <vector>
 #include <thread>
 #include "Axis.h"
-class Controller
+class Controller : QObject
 {
+	Q_OBJECT
 private:
 	HAND devHandle;
 	std::vector<Axis> axes;
@@ -29,4 +32,3 @@ private:
 	}
 
 };
-

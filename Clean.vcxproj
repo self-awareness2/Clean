@@ -95,7 +95,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DropShadowWidget.cpp" />
+    <QtMoc Include="ControllerWorker.h" />
     <ClCompile Include="IO.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWidget.cpp" />
@@ -105,7 +105,6 @@
     <ClCompile Include="TitleWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="DropShadowWidget.h" />
     <QtMoc Include="MainWidget.h" />
   </ItemGroup>
   <ItemGroup>
@@ -117,7 +116,7 @@
   <ItemGroup>
     <ClInclude Include="Axis.h" />
     <ClInclude Include="IO.h" />
-    <ClInclude Include="Controller.h" />
+    <QtMoc Include="Controller.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -1,14 +1,13 @@
 #pragma once
-#include "DropShadowWidget.h"
+#include <qmainwindow.h>
 #include "TitleWidget.h"
 #include "Controller.h"
-class MainWidget :public DropShadowWidget
+class MainWidget :public QMainWindow
 {
 	Q_OBJECT
 public:
 	MainWidget(QWidget *parent = nullptr);
 	~MainWidget();
-	void paintEvent(QPaintEvent* event);
 	Controller *controller;
 protected:
 
