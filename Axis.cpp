@@ -49,14 +49,14 @@ bool Axis::initialize()
 	}
 }
 
-void Axis::close()
-{
-	if (isInitialized) {
-		NMC_MtClose(&axisHandle);
-		isInitialized = false;
-		std::cout << "Axis" << axisID << "closed. \n";
-	}
-}
+//void Axis::close()
+//{
+//	if (isInitialized) {
+//		NMC_MtClose(&axisHandle);
+//		isInitialized = false;
+//		std::cout << "Axis" << axisID << "closed. \n";
+//	}
+//}
 
 bool Axis::home(int homeMethod,double velSwitch)
 {
@@ -74,7 +74,7 @@ bool Axis::side2side(bool direction)
 bool Axis::moveTo(long targetPosition, double velocity, double acceleration, double deceleration)
 {
 	if(!isInitialized) return logError("Axis not initialized!");
-	short ret = NMC_MtMovePtpAbs(axisHandle, acceleration, deceleration, 0, 0, velocity, 0,targetPosition);
+	short ret = NMC_MtMovePtpRel(axisHandle, acceleration, deceleration, 0, 0, velocity, 0,targetPosition);
 	return handleResult(ret, "NMC_MtMovePtpAbs");
 }
 
@@ -82,10 +82,12 @@ bool Axis::moveTo(long targetPosition, double velocity, double acceleration, dou
 
 void Axis::stop()
 {
-	if (isInitialized) {
 		NMC_MtStop(axisHandle);
-		std::cout << "Axis " << axisID << " stopped.\n";
-	}
+}
+
+void Axis::svOff()
+{
+	NMC_MtSetSvOff(axisHandle);
 }
 
 bool Axis::hasError()
@@ -93,8 +95,10 @@ bool Axis::hasError()
 	return false;
 }
 
-void Axis::clearError()
+void Axis::clear()
 {
+	NMC_MtClrError(axisHandle);
+	NMC_MtZeroPos(axisHandle);
 }
 
 

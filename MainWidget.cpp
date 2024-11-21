@@ -3,12 +3,23 @@
 MainWidget::MainWidget(QWidget* parent)
 	:DropShadowWidget(parent)
 {
+	controller = new Controller();
 	
 	setMinimumSize(1200, 900);
-	titleWidget = new TitleWidget(this);
-	titleWidget->show();
-	controller = new Controller();
+	QPushButton *a =new  QPushButton(QString::fromLocal8Bit("第一步"),this);
+	QPushButton *b =new QPushButton(QString::fromLocal8Bit("回家"),this);
+	QPushButton *stop =new QPushButton(QString::fromLocal8Bit("停止"),this);
+	
+	
+	a->setGeometry(500, 400, 100, 40);
+	b->setGeometry(500, 500, 100, 40);
+	stop->setGeometry(500, 600, 100, 40);
+	connect(a, &QPushButton::clicked, this, [&]() {controller->caseUp(); });
+	connect(b,&QPushButton::clicked, this, [&]() {controller->backHome(); });
+	connect(stop,&QPushButton::clicked, this, [&]() {controller->stop(); });
 
+	titleWidget = new TitleWidget(this);
+	titleWidget->hide();
 }
 
 
@@ -17,9 +28,6 @@ MainWidget::MainWidget(QWidget* parent)
 void MainWidget::paintEvent(QPaintEvent* event)
 {
     DropShadowWidget::paintEvent(event);
-    QPainter painter(this);
-    painter.setPen(Qt::NoPen);
-     painter.drawPixmap(10, 0, width()-20, 150, QPixmap("img/skin/12_big.png"));
 }
 
 MainWidget::~MainWidget()

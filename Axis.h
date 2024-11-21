@@ -22,18 +22,16 @@ private:
 public:
     long distance;
 
-
     /// <summary>
     /// 初始化
     /// </summary>
     /// <param name="devHandle">设备句柄</param>
     /// <param name="id">轴id</param>
     /// <param name="distance">轴负限位到正限位距离</param>
-    Axis(HAND devHandle,short id,long distance) :devHandle(devHandle), axisHandle(id+241), axisID(id), isInitialized(false),distance(distance) {}
-
+    Axis(HAND devHandle,short id,long distance,double v) :devHandle(devHandle), axisHandle(id+241), axisID(id), isInitialized(false),distance(distance), maxV(v){}
+    HAND getHandle() { return axisHandle; }
     // 初始化轴
     bool initialize( );
-
 
     /// <summary>
     /// 回零
@@ -44,7 +42,7 @@ public:
     bool home(int homeMethod,double velSwitch);
 
     /// <summary>
-    /// 由正限位到负限位,由负限位到正限位
+    /// 由正限位到负限位,由负限位到正限位,1正向脉冲，0负向脉冲
     /// </summary>
     /// <returns></returns>
     bool side2side(bool direction);
@@ -55,11 +53,13 @@ public:
     // 停止运动
     void stop();
 
+    void svOff();
+
     // 检查错误
     bool hasError();
 
-    // 清除错误
-    void clearError();
+    // 清除
+    void clear();
 
     // 析构函数
     ~Axis();
