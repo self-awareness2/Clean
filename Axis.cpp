@@ -67,7 +67,7 @@ bool Axis::home(int homeMethod,double velSwitch)
 
 bool Axis::side2side(bool direction)
 {	
-	moveTo(direction?distance:-distance, maxV, 0.1, 0.02);
+	moveTo(direction?distance:-distance, maxV, 0.1, 0.05);
 	return false;
 }
 

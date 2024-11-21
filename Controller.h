@@ -18,6 +18,7 @@ public:
 	bool  backHome();
 	bool initalize(short deviceNo);
 	bool caseUp();
+	bool caseDown();
 	void stop();
 	bool svOff();
 	~Controller();

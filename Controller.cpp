@@ -59,7 +59,7 @@ bool Controller::initalize(short deviceNo)
 	axes.push_back(Axis(devHandle,22,1080000,100));
 	axes.push_back(Axis(devHandle,23,1080000,100));
 	axes.push_back(Axis(devHandle,24,410000,100));
-	axes.push_back(Axis(devHandle,25,410000,100));
+	axes.push_back(Axis(devHandle,25,430000,100));
 	axes.push_back(Axis(devHandle,26,5000000,100));
 	axes.push_back(Axis(devHandle,27,5000000,100));
 	axes.push_back(Axis(devHandle,28,2750000,100));
@@ -111,8 +111,45 @@ bool Controller::caseUp()
 	}
 	axes[4].side2side(1);
 	axes[5].side2side(1);
-	return false;
+	return true;
 }
+
+
+bool Controller::caseDown()
+{
+	axes[4].side2side(0);
+	axes[5].side2side(0);
+	while (!(axesSts[4] >> 7 & 1))
+	{
+	}
+	while (!(axesSts[5] >> 7 & 1))
+	{
+
+	}
+	axes[6].side2side(0);
+	axes[7].side2side(0);
+	axes[8].side2side(0);
+	axes[9].side2side(0);
+
+	while (!(axesSts[6] >> 7 & 1))
+	{
+
+	}
+	while (!(axesSts[7] >> 7 & 1))
+	{
+
+	}while (!(axesSts[8] >> 7 & 1))
+	{
+
+	}while (!(axesSts[9] >> 7 & 1))
+	{
+
+	}
+	axes[4].side2side(1);
+	axes[5].side2side(1);
+	return true;
+}
+
 
 void Controller::stop()
 {
