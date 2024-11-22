@@ -1,30 +1,32 @@
 #pragma once
 #include <qobject.h>
 #include <qthread.h>
+#include <qcoreapplication.h>
 #include <vector>
 #include <thread>
 #include "Axis.h"
-class Controller : QObject
+class Controller : public QObject
 {
 	Q_OBJECT
 private:
 	HAND devHandle;
 	std::vector<Axis> axes;
 	std::vector<short> axesSts;
-	enum Status
-	{
-		BEGIN, RUN, ERROR, BACK
-	};
+	std::atomic<bool> stopRequested;
 	char* myGml;
 public:
-	Controller( );
-	bool  backHome();
+	explicit Controller(QObject * parent = nullptr );
 	bool initalize(short deviceNo);
-	bool caseUp();
-	bool caseDown();
-	void stop();
-	bool svOff();
 	~Controller();
+
+
+public slots:	
+	void  backHome();
+	void caseUp();
+	void caseDown();
+	void stop();
+	void svOff();
+
 private:
 	void flashStas();
 	void printError(const std::string& functionName, short errorCode) {

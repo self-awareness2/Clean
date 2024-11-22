@@ -1,5 +1,6 @@
 #pragma once
 #include <qmainwindow.h>
+#include <QtConcurrent/qtconcurrentrun.h>
 #include "TitleWidget.h"
 #include "Controller.h"
 class MainWidget :public QMainWindow

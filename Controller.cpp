@@ -1,12 +1,12 @@
 #include "Controller.h"
 
-Controller::Controller( )
+Controller::Controller( QObject * parent ):QObject(parent)
 {
 	myGml = const_cast<char*>("D:\\Test\\Clean\\singal_final.gml");
 	initalize(0);
 }
 
-bool Controller::backHome()
+void Controller::backHome()
 {
 	axes[0].home(1, 10);
 	axes[1].home(2, 10);
@@ -24,7 +24,6 @@ bool Controller::backHome()
 	axes[13].home(17, 80);
 	axes[14].home(17, 80);
 	axes[15].home(17, 80);
-	return true;
 }
 
 bool Controller::initalize(short deviceNo)
@@ -79,99 +78,88 @@ bool Controller::initalize(short deviceNo)
 	return true;
 }
 
-bool Controller::caseUp()
+void Controller::caseUp()
 {
 	axes[4].side2side(0);
 	axes[5].side2side(0);
-	while (!(axesSts[4]>>7&1))
+	while (!(axesSts[4]>>7&1)|| !(axesSts[5] >> 7 & 1))
 	{
-	}
-	while (!(axesSts[5] >> 7 & 1))
-	{
-
+		if (stopRequested)	return;
+		QThread::msleep(200);
 	}
 	axes[6].side2side(1);
 	axes[7].side2side(1);
 	axes[8].side2side(1);
 	axes[9].side2side(1);
 
-	while (!(axesSts[6] >> 6 & 1)) 
+	while (!(axesSts[6] >> 7 & 1) || !(axesSts[7] >> 7 & 1) || !(axesSts[8] >> 7 & 1) || !(axesSts[9] >> 7 & 1))
 	{
-
-	}
-	while (!(axesSts[7] >> 6 & 1))
-	{
-
-	}while (!(axesSts[8] >> 6 & 1))
-	{
-
-	}while (!(axesSts[9] >> 6 & 1))
-	{
-
+		if (stopRequested) return;
+		QThread::msleep(200);
 	}
 	axes[4].side2side(1);
 	axes[5].side2side(1);
-	return true;
+	while (!(axesSts[4] >> 6 & 1) || !(axesSts[5] >> 6 & 1))
+	{
+		if (stopRequested)	return;
+		QThread::msleep(200);
+	}
 }
 
 
-bool Controller::caseDown()
+void Controller::caseDown()
 {
+	stopRequested = false;
 	axes[4].side2side(0);
 	axes[5].side2side(0);
-	while (!(axesSts[4] >> 7 & 1))
+	while (!(axesSts[4] >> 7 & 1)|| !(axesSts[5] >> 7 & 1))
 	{
+		if (stopRequested)	return;
+		QThread::msleep(200);
 	}
-	while (!(axesSts[5] >> 7 & 1))
-	{
 
-	}
 	axes[6].side2side(0);
 	axes[7].side2side(0);
 	axes[8].side2side(0);
 	axes[9].side2side(0);
 
-	while (!(axesSts[6] >> 7 & 1))
+	while (!(axesSts[6] >> 7 & 1)|| !(axesSts[7] >> 7 & 1)|| !(axesSts[8] >> 7 & 1)|| !(axesSts[9] >> 7 & 1))
 	{
-
-	}
-	while (!(axesSts[7] >> 7 & 1))
-	{
-
-	}while (!(axesSts[8] >> 7 & 1))
-	{
-
-	}while (!(axesSts[9] >> 7 & 1))
-	{
-
+		if (stopRequested) return;
+		QThread::msleep(200);
 	}
 	axes[4].side2side(1);
 	axes[5].side2side(1);
-	return true;
+	while (!(axesSts[4] >> 6 & 1) || !(axesSts[5] >> 6 & 1))
+	{
+		if (stopRequested)	return;
+		QThread::msleep(200);
+	}
 }
 
 
 void Controller::stop()
 {
-		for (int i = 0; i < axes.size(); i++)
-		{
-			axes[i].stop();
-		}
+	stopRequested = true;
+	for (int i = 0; i < axes.size(); i++)
+	{
+		axes[i].stop();
+	}	
 }
 
-bool Controller::svOff()
+void Controller::svOff()
 {
 	for (auto axis : axes)
 	{
 		axis.svOff();
 	}
-	return true;
 }
 
 
 Controller::~Controller()
 {
 	stop();
+	svOff();
 }
 
 void Controller::flashStas()
