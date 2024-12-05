@@ -29,9 +29,6 @@
     <ClCompile Include="MainWidget.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DropShadowWidget.cpp">
-      <Filter>Resource Files\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TitleWidget.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
@@ -41,17 +38,17 @@
     <ClCompile Include="Axis.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Control.cpp">
+    <ClCompile Include="IO.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IO.cpp">
+    <ClCompile Include="Controller.cpp">
+      <Filter>Resource Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="DropShadowWidget.h">
-      <Filter>Resource Files\Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="MainWidget.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
@@ -61,15 +58,21 @@
     <QtMoc Include="PushButton.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ControllerWorker.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Controller.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Axis.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Control.h">
+    <ClInclude Include="IO.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IO.h">
+    <ClInclude Include="Logger.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

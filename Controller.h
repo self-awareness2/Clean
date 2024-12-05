@@ -5,6 +5,8 @@
 #include <vector>
 #include <thread>
 #include "Axis.h"
+#include "Logger.h"
+#define log() lg::Logger::instance()
 class Controller : public QObject
 {
 	Q_OBJECT
@@ -15,6 +17,7 @@ private:
 	std::atomic<bool> stopRequested;
 	char* myGml;
 public:
+	LOG4QT_DECLARE_STATIC_LOGGER(logger, "mystaticlog");
 	explicit Controller(QObject * parent = nullptr );
 	bool initalize(short deviceNo);
 	~Controller();
@@ -30,7 +33,8 @@ public slots:
 private:
 	void flashStas();
 	void printError(const std::string& functionName, short errorCode) {
-		std::cerr << functionName << " failed with error code: " << errorCode << "\n";
+		//char* errstr = functionName + "failed with error code:";// errorCode + '\n';
+		log().Error("controll funcerro");
 	}
 
 };

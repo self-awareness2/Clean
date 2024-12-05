@@ -36,13 +36,13 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>5.9.9_msvc2017_64</QtInstall>
+    <QtInstall>5.12.12_msvc2017_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>5.9.9_msvc2017_64</QtInstall>
-    <QtModules>core</QtModules>
+    <QtInstall>5.12.12_msvc2017_64</QtInstall>
+    <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -60,14 +60,21 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>$(ProjectDir)\includes;$(ProjectDir)\includes\opencv2;$(ProjectDIr)\includes\qxlsx;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Test\Log4Qt-master\LOG4QT\include;$(ProjectDir)\includes;$(ProjectDir)\includes\opencv2;$(ProjectDIr)\includes\qxlsx;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <IncludePath>D:\Test\Log4Qt-master\LOG4QT\include;$(ProjectDir)\includes;$(ProjectDir)\includes\opencv2;$(ProjectDIr)\includes\qxlsx;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>nmc_lib20.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>nmc_lib20.lib;log4qt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalDependencies>nmc_lib20.lib;log4qt.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -97,6 +104,7 @@
   <ItemGroup>
     <QtMoc Include="ControllerWorker.h" />
     <ClCompile Include="IO.cpp" />
+    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWidget.cpp" />
     <ClCompile Include="Axis.cpp" />
@@ -116,6 +124,7 @@
   <ItemGroup>
     <ClInclude Include="Axis.h" />
     <ClInclude Include="IO.h" />
+    <ClInclude Include="Logger.h" />
     <QtMoc Include="Controller.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
