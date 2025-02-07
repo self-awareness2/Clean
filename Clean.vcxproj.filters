@@ -58,9 +58,6 @@
     <QtMoc Include="PushButton.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ControllerWorker.h">
-      <Filter>Resource Files\Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="Controller.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>

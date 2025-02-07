@@ -1,22 +1,33 @@
-#include "mainWidget.h"
+ï»¿#include "mainWidget.h"
+#include <QScrollArea>
+#include  <opencv2/opencv.hpp>
+#include <cstdio>
+#include <iostream>
+
 
 MainWidget::MainWidget(QWidget* parent)
+    : QMainWindow(parent)
 {
-	log().init("CleanLog"); // ³õÊ¼»¯ÈÕÖ¾ÏµÍ³
-	log().Debug("test");
-	controller = new Controller();
-	setMinimumSize(1200, 900);
-	QPushButton *a =new  QPushButton(QString::fromLocal8Bit("Ì§¸Ç"),this);
-	QPushButton *b =new QPushButton(QString::fromLocal8Bit("»Ø¼Ò"),this);
-	QPushButton *c =new  QPushButton(QString::fromLocal8Bit("ºÏ¸Ç"),this);
-	QPushButton *stop =new QPushButton(QString::fromLocal8Bit("Í£Ö¹	"),this);
-	a->setGeometry(100,100,100,50); // ÉèÖÃ¹Ì¶¨´óÐ¡
-	c->setGeometry(200,100,100,50); // ÉèÖÃ¹Ì¶¨´óÐ¡
-	b->setGeometry(100,200,100,50); // ÉèÖÃ¹Ì¶¨´óÐ¡
-	stop->setGeometry(200,200,100,50); // ÉèÖÃ¹Ì¶¨´óÐ¡
+    lg::Logger::instance().init("CleanLog"); // åˆå§‹åŒ–æ—¥å¿—ç³»ç»Ÿ
+    lg::Logger::instance().Info("App Start!");
+
+    QThread* controllerThread = new QThread(this);
+    controller = new Controller();
+    setMinimumSize(1200, 900);
+	QPushButton *a =new  QPushButton(QString::fromLocal8Bit("æŠ¬ç›–"),this);
+	QPushButton *b =new QPushButton(QString::fromLocal8Bit("å›žå®¶"),this);
+	QPushButton *c =new  QPushButton(QString::fromLocal8Bit("åˆç›–"),this);
+	QPushButton *stop =new QPushButton(QString::fromLocal8Bit("åœæ­¢	"),this);
+	QPushButton *test =new QPushButton(QString::fromLocal8Bit("è¿è¡Œæµ‹è¯•	"),this);
+	a->setGeometry(100,100,100,50); // è®¾ç½®å›ºå®šå¤§å°
+	c->setGeometry(200,100,100,50); // è®¾ç½®å›ºå®šå¤§å°
+	b->setGeometry(100,200,100,50); // è®¾ç½®å›ºå®šå¤§å°
+	stop->setGeometry(200,200,100,50); // è®¾ç½®å›ºå®šå¤§å°
+	test->setGeometry(300,200,100,50); // è®¾ç½®å›ºå®šå¤§å°
 	connect(a, &QPushButton::clicked, controller, [&]() {	QtConcurrent::run(controller, &Controller::caseUp);});
 	connect(b, &QPushButton::clicked, controller, &Controller::backHome);
 	connect(c, &QPushButton::clicked, controller, [&](){	QtConcurrent::run(controller, &Controller::caseDown);	});
+	connect(test, &QPushButton::clicked, controller, [&](){	QtConcurrent::run(controller, &Controller::autoRun);	});
 	connect(stop, &QPushButton::clicked, controller, &Controller::stop);
 	titleWidget = new TitleWidget(this);
 	titleWidget->hide();
@@ -26,4 +37,3 @@ MainWidget::MainWidget(QWidget* parent)
 MainWidget::~MainWidget()
 {
 }
-

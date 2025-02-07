@@ -1,86 +1,81 @@
-#pragma once
+ï»¿#pragma once
 #include "mtn_lib20.h"
 #include "mtn_lib20_err.h"
 #include "mtn_lib20_ecat.h"
 #include "mtn_lib20_ext.h"
 #include "mtn_lib20_oem.h"
 #include <iostream>
+#include "Logger.h"
 
-struct AxisStatus
-{
-    bool isBusy;
-    bool isNeg;
+struct AxisStatus {
+    bool positiveLimit;  // æ­£é™ä½
+    bool negativeLimit;  // è´Ÿé™ä½
+    bool isMoving;       // æ˜¯å¦è¿åŠ¨
+    bool hasError;       // æ˜¯å¦æŠ¥é”™
 };
 
 class Axis {
 private:
-    HAND axisHandle;  // Öá¾ä±ú
-    HAND devHandle;//¿ØÖÆÆ÷¾ä±ú
-    short axisID;  //Öáid
+    HAND axisHandle;  // è½´å¥æŸ„
+    HAND devHandle;//æ§åˆ¶å™¨å¥æŸ„
+    short axisID;  //è½´id
     bool isInitialized;
     double maxV;
 public:
     long distance;
 
     /// <summary>
-    /// ³õÊ¼»¯
+    /// åˆå§‹åŒ–
     /// </summary>
-    /// <param name="devHandle">Éè±¸¾ä±ú</param>
-    /// <param name="id">Öáid</param>
-    /// <param name="distance">Öá¸ºÏŞÎ»µ½ÕıÏŞÎ»¾àÀë</param>
+    /// <param name="devHandle">è®¾å¤‡å¥æŸ„</param>
+    /// <param name="id">è½´id</param>
+    /// <param name="distance">è½´è´Ÿé™ä½åˆ°æ­£é™ä½è·ç¦»</param>
     Axis(HAND devHandle,short id,long distance,double v) :devHandle(devHandle), axisHandle(id+241), axisID(id), isInitialized(false),distance(distance), maxV(v){}
     HAND getHandle() { return axisHandle; }
-    // ³õÊ¼»¯Öá
+    // åˆå§‹åŒ–è½´
     bool initialize( );
 
     /// <summary>
-    /// »ØÁã
+    /// å›é›¶
     /// </summary>
-    /// <param name="homeMethod">ÕÒÔ­µã·½Ê½</param>
-    /// <param name="velSwitch">ËÙ¶È</param>
+    /// <param name="homeMethod">æ‰¾åŸç‚¹æ–¹å¼</param>
+    /// <param name="velSwitch">é€Ÿåº¦</param>
     /// <returns></returns>
     bool home(int homeMethod,double velSwitch);
 
     /// <summary>
-    /// ÓÉÕıÏŞÎ»µ½¸ºÏŞÎ»,ÓÉ¸ºÏŞÎ»µ½ÕıÏŞÎ»,1ÕıÏòÂö³å£¬0¸ºÏòÂö³å
+    /// ç”±æ­£é™ä½åˆ°è´Ÿé™ä½,ç”±è´Ÿé™ä½åˆ°æ­£é™ä½,1æ­£å‘è„‰å†²ï¼Œ0è´Ÿå‘è„‰å†²
     /// </summary>
     /// <returns></returns>
     bool side2side(bool direction);
 
-    // µãÎ»ÔË¶¯£¨¾ø¶ÔÎ»ÖÃ£©
+    // ç‚¹ä½è¿åŠ¨ï¼ˆç»å¯¹ä½ç½®ï¼‰
     bool moveTo(long targetPosition, double velocity, double acceleration, double deceleration);
 
-    // Í£Ö¹ÔË¶¯
+    // åœæ­¢è¿åŠ¨
     void stop();
 
     void svOff();
 
-    // ¼ì²é´íÎó
+    // æ£€æŸ¥é”™è¯¯
     bool hasError();
 
-    // Çå³ı
+    // æ¸…é™¤
     void clear();
 
-    // Îö¹¹º¯Êı
+    // ææ„å‡½æ•°
     ~Axis();
 
 
 private:
     bool handleResult(short result, const std::string& functionName) {
         if (result == RTN_CMD_SUCCESS) return true;
-        printError(functionName, result);
+        logError(functionName, result);
         return false;
     }
-    // ÄÚ²¿º¯Êı£º´òÓ¡´íÎó
-    void printError(const std::string& functionName, short errorCode) {
-        std::cerr << functionName << " failed with error code: " << errorCode << "\n";
+    // å†…éƒ¨å‡½æ•°ï¼šæ‰“å°é”™è¯¯
+    void logError(const std::string& functionName, short errorCode) {
+        std::string errmsg =functionName + "failed with error code " + std::to_string(errorCode);
+        lg::Logger::instance().Error(errmsg.c_str());
     }
-
-    bool logError(const std::string& message)
-    {
-        std::cerr << "Error: " << message << std::endl;
-        return true;
-    }
-
-
 };

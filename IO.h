@@ -1,17 +1,17 @@
-#pragma once
+ï»¿#pragma once
 #include "mtn_lib20.h"
 #include "mtn_lib20_err.h"
 #include <iostream>
 
 class IOController {
 private:
-    HAND devHandle; // Éè±¸¾ä±ú
+    HAND devHandle;
 
 public:
-    // ¹¹Ôìº¯Êý
+
     IOController(HAND handle) : devHandle(handle) {}
 
-    // ÉèÖÃµ¥¸öÎ»Êä³ö
+
     bool setOutputBit(short bitIndex, bool value) {
         short ret = NMC_SetDOBit(devHandle, bitIndex, value ? 1 : 0);
         if (ret == RTN_CMD_SUCCESS) {
@@ -24,7 +24,7 @@ public:
         }
     }
 
-    // ¶ÁÈ¡µ¥¸öÎ»ÊäÈë
+    // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½
     bool getInputBit(short bitIndex, bool& value) {
         short bitValue = 0;
         short ret = NMC_GetDIBit(devHandle, bitIndex, &bitValue);
@@ -39,7 +39,7 @@ public:
         }
     }
 
-    // ÉèÖÃÕû×éÊä³ö
+
     bool setOutputGroup(short groupID, long value) {
         short ret = NMC_SetDOGroup(devHandle, value, groupID);
         if (ret == RTN_CMD_SUCCESS) {
@@ -52,7 +52,7 @@ public:
         }
     }
 
-    // ¶ÁÈ¡Õû×éÊäÈë
+
     bool getInputGroup(short groupID, long& value) {
         short ret = NMC_GetDIGroup(devHandle, &value, groupID);
         if (ret == RTN_CMD_SUCCESS) {
@@ -65,7 +65,6 @@ public:
         }
     }
 
-    // ¼ì²éÀ©Õ¹IOÄ£¿é×´Ì¬
     bool checkIOModuleStatus(unsigned long& status) {
         short ret = NMC_GetIOModuleSts(devHandle, &status);
         if (ret == RTN_CMD_SUCCESS) {
@@ -78,7 +77,6 @@ public:
         }
     }
 
-    // ÆôÓÃÀ©Õ¹IOÄ£¿é
     bool enableIOModule(unsigned char moduleID) {
         short ret = NMC_SetIOModuleEn(devHandle, moduleID);
         if (ret == RTN_CMD_SUCCESS) {

@@ -1,11 +1,11 @@
-#include "TitleWidget.h"
+﻿#include "TitleWidget.h"
 
 TitleWidget::TitleWidget(QWidget* parent)
 	:QWidget(parent)
 {
 	setGeometry(30, 0, 1150, 150);
-	//�ϰ벿�� 
-	title = new QLabel(QString::fromLocal8Bit("MASK��ⴵɨ-ASTI"));
+	//上半部分 
+	title = new QLabel(QString::fromLocal8Bit("MASK检测吹扫-ASTI"));
 	title->setObjectName("whiteLabel");
 
 
@@ -22,7 +22,7 @@ TitleWidget::TitleWidget(QWidget* parent)
 	titleLayout->setContentsMargins(0, 0, 5, 0);
 	title->setContentsMargins(15, 0, 0, 0);
 
-	//�°벿��
+	//下半部分
 	controlButton = new PushButton();
 	imageButton = new PushButton();
 

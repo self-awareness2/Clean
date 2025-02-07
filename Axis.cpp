@@ -1,4 +1,4 @@
-#include "Axis.h"
+﻿#include "Axis.h"
 
 bool Axis::initialize()
 {
@@ -6,10 +6,9 @@ bool Axis::initialize()
 	if (ret == RTN_CMD_SUCCESS)
 	{
 		isInitialized = true;
-		std::cout << "Axis" << axisID << "initialized successfully. \n";
 	}
 	else {
-		printError("NMC_MTOpen", ret);
+		logError("NMC_MTOpen", ret);
 		return false;
 	}
 	ret = NMC_MtZeroPos(axisHandle);
@@ -17,7 +16,7 @@ bool Axis::initialize()
 
 	}
 	else {
-		printError("NMC_MtZeroPos", ret);
+		logError("NMC_MtZeroPos", ret);
 		return false;
 	}
 	ret = NMC_MtClrError(axisHandle);
@@ -25,7 +24,7 @@ bool Axis::initialize()
 
 	}
 	else {
-		printError("NMC_MtClrError", ret);
+		logError("NMC_MtClrError", ret);
 		return false;
 	}
 	ret = NMC_MtSetStepMode(axisHandle, 0, 1);
@@ -33,18 +32,17 @@ bool Axis::initialize()
 
 	}
 	else {
-		printError("NMC_MtSetStepMode", ret);
+		logError("NMC_MtSetStepMode", ret);
 		return false;
 	}
 	ret = NMC_MtSetSvOn(axisHandle);
 	if (ret == RTN_CMD_SUCCESS)
 	{
-		std::cout << "Axis " << axisID << "SvOn successfully. \n";
 		return true;
 	}
 	else
 	{
-		printError("NMC_MtSetSvOn", ret);
+		logError("NMC_MtSetSvOn", ret);
 		return false;
 	}
 }
@@ -60,7 +58,11 @@ bool Axis::initialize()
 
 bool Axis::home(int homeMethod,double velSwitch)
 {
-	if (!isInitialized) return logError("Axis not initialized!");
+	if (!isInitialized)
+	{
+	lg::Logger::instance().Error("Axis not initialized!");
+		return 0;
+	}
 	short ret = NMC_EcatStartHome(axisHandle, homeMethod, velSwitch, 1, 0.1, 0);
 	return handleResult(ret, "NMC_EcatStartHome");
 }
@@ -73,7 +75,11 @@ bool Axis::side2side(bool direction)
 
 bool Axis::moveTo(long targetPosition, double velocity, double acceleration, double deceleration)
 {
-	if(!isInitialized) return logError("Axis not initialized!");
+	if (!isInitialized)
+	{
+		lg::Logger::instance().Error("Axis not initialized!");
+		return 0;
+	}
 	short ret = NMC_MtMovePtpRel(axisHandle, acceleration, deceleration, 0, 0, velocity, 0,targetPosition);
 	return handleResult(ret, "NMC_MtMovePtpAbs");
 }

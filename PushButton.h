@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <qpushbutton.h>
 #include <QMouseEvent>
 #include <QPainter>

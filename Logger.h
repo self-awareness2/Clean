@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <log4qt/log4qt.h>
 #include <log4qt/logger.h>
@@ -8,6 +8,7 @@
 #include <log4qt/fileappender.h>
 #include <log4qt/propertyconfigurator.h>
 #include <qdatetime.h>
+#include <memory>
 
 namespace lg {
 	class Logger
@@ -15,17 +16,15 @@ namespace lg {
 	private:
 		Logger( );
 		~Logger();
-		Logger(const Logger&) = delete; // ½ûÓÃ¿½±´¹¹Ôì
-		Logger& operator=(const Logger&) = delete; // ½ûÓÃ¸³ÖµÔËËã·û
+		Logger(const Logger&) = delete; // ç¦ç”¨æ‹·è´æ„é€ 
+		Logger& operator=(const Logger&) = delete; // ç¦ç”¨èµ‹å€¼è¿ç®—ç¬¦
 		QString getTime();
-		
-		Log4Qt::Logger* logger;
+		Log4Qt::Logger *logger;
 		Log4Qt::ConsoleAppender* consoleAppender;
-		QDate today;
-
 		Log4Qt::FileAppender* fileAppender;
+		QDate today;
 		QString filename;
-		Log4Qt::PatternLayout* layout;
+		Log4Qt::PatternLayout* layout;  //äº¤ç»™appderåæ— éœ€æ‰‹åŠ¨é‡Šæ”¾
 		bool  isinited;
 	public:
 		static Logger& instance();

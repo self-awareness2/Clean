@@ -1,4 +1,4 @@
-#include "PushButton.h"
+ï»¿#include "PushButton.h"
 #include <qdebug.h>
 PushButton::PushButton(QWidget* parent)
 	:QPushButton(parent)
@@ -21,7 +21,7 @@ void PushButton::setPicName(QString picName)
 void PushButton::enterEvent(QEvent*)
 {
 	status = ENTER;
-	update(); //ÖØĞÂ»æÖÆ
+	update(); //é‡æ–°ç»˜åˆ¶
 }
 
 void PushButton::mousePressEvent(QMouseEvent* event)

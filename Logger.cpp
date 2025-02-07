@@ -1,4 +1,4 @@
-#include "Logger.h"
+﻿#include "Logger.h"
 
 lg::Logger& lg::Logger::instance()
 {
@@ -12,9 +12,7 @@ lg::Logger::Logger( ):
 
 lg::Logger::~Logger()
 {
-	if (consoleAppender) delete consoleAppender;
-	if (fileAppender) delete fileAppender;
-	if (layout) delete layout;
+	//Logger 对象会接管 consoleAppender 的所有权（按照 Log4Qt 的设计），你就不必再手动 delete 它。
 }
 
 QString lg::Logger::getTime()
@@ -29,7 +27,7 @@ void lg::Logger::init(QString logName) {
 	if (isinited) return;
 	today = QDate::currentDate();
 	logger = Log4Qt::Logger::logger(logName);
-	consoleAppender = new Log4Qt::ConsoleAppender();
+	consoleAppender =new Log4Qt::ConsoleAppender();
 	fileAppender = new Log4Qt::FileAppender();
 	layout = new Log4Qt::PatternLayout();
 
