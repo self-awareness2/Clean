@@ -1,5 +1,5 @@
 ﻿#include <QApplication>
-#include "MainWidget.h"
+#include "UI/MainWidget.h"
 #include <Windows.h>
 int main(int argc, char *argv[])
 {

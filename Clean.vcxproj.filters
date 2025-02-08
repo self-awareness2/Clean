@@ -23,20 +23,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="source\final.gml" />
     <None Include="source\singal_final.gml" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\main.cpp">
-      <Filter>Resource Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\MainWidget.cpp">
-      <Filter>Resource Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\PushButton.cpp">
-      <Filter>Resource Files\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\TitleWidget.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\controller\Axis.cpp">
@@ -51,18 +41,15 @@
     <ClCompile Include="source\log\Logger.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\UI\MainWidget.cpp">
+      <Filter>Resource Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="source\MainWidget.h">
-      <Filter>Resource Files\Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="source\PushButton.h">
-      <Filter>Resource Files\Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="source\TitleWidget.h">
-      <Filter>Resource Files\Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="source\controller\Controller.h">
+      <Filter>Resource Files\Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="source\UI\MainWidget.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
   </ItemGroup>

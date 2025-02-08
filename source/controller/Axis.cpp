@@ -72,19 +72,28 @@ bool Axis::side2side(bool direction)
 	moveTo(direction?distance:-distance, maxV, 0.1, 0.05);
 	return false;
 }
-// 绝对运动
+/// @brief  绝对运动
+/// @param targetPosition 目标位置
+/// @param velocity 速度
+/// @param acceleration 加速度
+/// @param deceleration 减速度
+/// @return 
 bool Axis::moveTo(long targetPosition, double velocity, double acceleration, double deceleration)
 {
 	short ret = NMC_MtMovePtpAbs(axisHandle, acceleration, deceleration, 0, 0, velocity, 0,targetPosition);
 	return handleResult(ret, "NMC_MtMovePtpAbs");
 }
 
-// 相对运动
+
+/// @brief  相对运动
+/// @param targetDistance 距离
+/// @return 
 bool Axis::move(long targetDistance)
 {
 	short ret = NMC_MtMovePtpRel(axisHandle, 0.1, 0.1, 0, 0, maxV, 0, targetDistance);
 	return handleResult(ret, "NMC_MtMovePtpRel");
 }
+
 
 
 

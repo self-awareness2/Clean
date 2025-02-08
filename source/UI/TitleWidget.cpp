@@ -28,13 +28,13 @@ TitleWidget::TitleWidget(QWidget* parent)
 
 
 	
-	controlButton->setPicName(QString("img/operation/control.png"));
-	imageButton->setPicName(QString("img/operation/view.png"));
-	minButton->setPicName(QString("img/min.png"));
-	closeButton->setPicName(QString("img/close.png"));
+	controlButton->setPicName(QString("../img/operation/control.png"));
+	imageButton->setPicName(QString("../img/operation/view.png"));
+	minButton->setPicName(QString("../img/min.png"));
+	closeButton->setPicName(QString("../img/close.png"));
 
 	logo = new QLabel(); 
-	QPixmap pixmap = QPixmap("img/logo.png");
+	QPixmap pixmap = QPixmap("../img/logo.png");
 	logo->setPixmap(pixmap);
 	logo->setFixedSize(pixmap.size());
 	logo->setAlignment(Qt::AlignRight);

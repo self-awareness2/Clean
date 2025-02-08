@@ -26,42 +26,12 @@ bool Controller::backHome()
 	axes[13].home(17, 80);	
 	axes[14].home(17, 80);
 	axes[15].home(17, 80);
+
+	while (!areAllAxesInInitialState())
+	{
+		QThread::msleep(200);
+	}
 	return true;
-}
-void Controller::setupStateMachine() {
-	// 创建状态
-	//m_states[ST_IDLE] = new QState();
-	//m_states[ST_STEP1_LIFT_DOWN] = new QState();
-	//m_states[ST_STEP1_GRIP_OPEN] = new QState();
-	//m_states[ST_STEP1_LIFT_UP] = new QState();
-	//m_states[ST_STEP2_MASK_MOVE] = new QState();
-	//m_states[ST_STEP2_MASK_DOWN] = new QState();
-	//m_states[ST_STEP2_MASK_GRIP] = new QState();
-	//m_states[ST_STEP2_MASK_UP] = new QState();
-	//m_states[ST_STEP3_SCAN] = new QState();
-	//m_states[ST_STEP4_MASK_DOWN] = new QState();
-	//m_states[ST_STEP4_MASK_GRIP] = new QState();
-	//m_states[ST_STEP4_MASK_UP] = new QState();
-	//m_states[ST_STEP5_LIFT_DOWN] = new QState();
-	//m_states[ST_STEP5_GRIP_CLOSE] = new QState();
-	//m_states[ST_STEP5_LIFT_UP] = new QState();
-	//m_states[ST_COMPLETED] = new QFinalState();
-	//m_states[ST_PAUSED] = new QState();
-	//m_states[ST_ERROR] = new QState();
-
-	//// 设置初始状态
-	//m_machine.setInitialState(m_states[ST_IDLE]);
-
-	//// 添加状态到状态机
-	//for (auto state : m_states) {
-	//	m_machine.addState(state);
-	//}
-
-	//// 设置状态转换
-	//setupTransitions();
-
-	//// 启动状态机
-	//m_machine.start();
 }
 
 bool Controller::initalize(short deviceNo)
@@ -118,6 +88,7 @@ bool Controller::initalize(short deviceNo)
 void Controller::caseUp()
 {
 	logInfo("start caseUP!");
+	emit stepChanged(1);
 	if(!axesSts[2].negativeLimit || !axesSts[3].negativeLimit) // 判断搬运轴是否在负限位
 	{
 		logError("caseUp failed, axis 2 or 3 not at negative limit");
@@ -125,7 +96,6 @@ void Controller::caseUp()
 	}
 	axes[4].side2side(0);
 	while (!(axesSts[4].negativeLimit) || !(axesSts[5].negativeLimit))
-
 	{
 		if (stopRequested)	return;
 		QThread::msleep(200);
@@ -157,9 +127,11 @@ void Controller::maskUp()
 		return;
 	}
 	logInfo("The operation of step 'maskclawMove' has commenced execution.");
+	emit stepChanged(2);
 	axes[2].side2side(1);
 	axes[3].side2side(1);
 	while (!(axesSts[2].positiveLimit) || !(axesSts[3].positiveLimit))
+
 	{
 		if (stopRequested)	return;
 		QThread::msleep(200);
@@ -192,11 +164,13 @@ void Controller::maskDetect()
 		return;
 	}
 	logInfo("start maskDetect!");
+	emit stepChanged(3);
 	if(maskSize)
 	{
 		circleCount = 11;
 		axes[2].move(-210000);
 	}
+
 	else
 	{
 		circleCount = 12;
@@ -208,11 +182,10 @@ void Controller::maskDetect()
 		camera();
 	}
 
-
+	axes[2].moveTo(0,20,0.1,0.1);
 }
 
 void Controller::camera()
-
 {
 	for(int i = 0; i < circleCount; i++)
 	{
@@ -222,6 +195,7 @@ void Controller::camera()
 			QThread::msleep(200);
 		}
 		//打开灯光相机拍摄
+		
 		axes[0].side2side(1);
 		while (!axesSts[0].positiveLimit)
 		{
@@ -237,19 +211,69 @@ void Controller::camera()
 }
 
 
-void Controller::caseDown()
-
+/// @brief 下降玻璃
+void Controller::maskDown()
 {
-	logInfo("start caseDown!");
+	if(axesSts[2].positiveLimit == 0 && axesSts[3].positiveLimit == 0)
+
+	{
+		logError("maskDown failed, axis 2 and 3 not at positive limit");
+		return;
+	}
+
+	logInfo("start maskDown!");
+	emit stepChanged(4);
+	axes[10].side2side(0);
+	axes[11].side2side(0);
+
+	while (axesSts[10].negativeLimit == 0 && axesSts[11].negativeLimit == 0)
+	{
+		if (stopRequested)	return;
+		QThread::msleep(200);
+	}
+
+	axes[12].side2side(0);
+	axes[13].side2side(0);
+	axes[14].side2side(0);
+	axes[15].side2side(0);
+	while (!(axesSts[12].positiveLimit) || !(axesSts[13].positiveLimit) || !(axesSts[14].positiveLimit) || !(axesSts[15].positiveLimit))
+	{
+		if (stopRequested)	return;
+		QThread::msleep(200);
+	}
+	
+	axes[10].side2side(1);
+	axes[11].side2side(1);
+	while (axesSts[10].positiveLimit == 0 && axesSts[11].positiveLimit == 0 )
+	{
+		if (stopRequested)	return;
+		QThread::msleep(200);
+	}
+
+	//搬运归位
+	axes[2].side2side(0); 
+	while (axesSts[2].negativeLimit == 0 && axesSts[3].negativeLimit == 0)
+	{
+		if (stopRequested)	return;
+		QThread::msleep(200);
+	}
+}
+
+/// @brief 下降盖子
+void Controller::caseDown()
+{
 	if(!axesSts[2].negativeLimit && !axesSts[3].negativeLimit) // 判断搬运轴是否在负限位
 	{
 		logError("caseDown failed, axis 2 or 3 not at negative limit");
+
 		return;
 	}
-	stopRequested = false;
+	logInfo("start caseDown!");
+	emit stepChanged(5);
 	axes[4].side2side(0);
 	axes[5].side2side(0);
 	while (!(axesSts[4].negativeLimit) &&!(axesSts[5].negativeLimit))
+
 	{
 		if (stopRequested)	return;
 		QThread::msleep(200);
@@ -273,9 +297,10 @@ void Controller::caseDown()
 	}
 }
 
-
+/// @brief 停止
 void Controller::stop()
 {
+	emit stateChanged(ST_PAUSED);
 	stopRequested = true;
 	for (int i = 0; i < axes.size(); i++)
 	{
@@ -284,6 +309,7 @@ void Controller::stop()
 	logError("clicked stop button , all axes stoped \n");
 }
 
+/// @brief 断所有使能
 void Controller::svOff()
 {
 	for (auto axis : axes)
@@ -292,28 +318,32 @@ void Controller::svOff()
 	}
 }
 
-
+/// @brief 析构函数
 Controller::~Controller()
 {
-	stopTogether();
 	stop();
+	stopTogether();
 	svOff();
-	delete timer;
 }
 
 /// @brief 自动运行
 void  Controller::autoRun()
 {
+	backHome();
 	if(!areAllAxesInInitialState())
 	{
 		logError("autoRun failed, axes not in initial state");
 		return;
 	}
+	logInfo("autoRun start!");
+	emit stateChanged(ST_RUNNING);
 	caseUp();
 	maskUp();
 	maskDetect();
+	maskDown();
 	caseDown();
 }
+
 
 /// @brief 刷新轴状态
 void Controller::flashAxisStaus()

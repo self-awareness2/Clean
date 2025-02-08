@@ -17,7 +17,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="source\final.gml" />
     <None Include="source\singal_final.gml" />
   </ItemGroup>
   <ItemGroup>
@@ -26,23 +25,13 @@
     <ClCompile Include="source\controller\IO.cpp" />
     <ClCompile Include="source\log\Logger.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\MainWidget.cpp" />
-    <ClCompile Include="source\PushButton.cpp" />
-    <ClCompile Include="source\TitleWidget.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="source\MainWidget.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="source\PushButton.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="source\TitleWidget.h" />
+    <ClCompile Include="source\UI\MainWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\controller\Axis.h" />
     <ClInclude Include="source\controller\IO.h" />
     <ClInclude Include="source\log\Logger.h" />
+    <QtMoc Include="source\UI\MainWidget.h" />
     <QtMoc Include="source\controller\Controller.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
