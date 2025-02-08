@@ -7,10 +7,6 @@ Controller::Controller( QObject * parent ):QObject(parent)
 	}
 }
 
-void  Controller::checkStatus()
-{
-
-}
 
 bool Controller::backHome() 
 {
@@ -30,41 +26,42 @@ bool Controller::backHome()
 	axes[13].home(17, 80);	
 	axes[14].home(17, 80);
 	axes[15].home(17, 80);
+	return true;
 }
 void Controller::setupStateMachine() {
 	// 创建状态
-	m_states[ST_IDLE] = new QState();
-	m_states[ST_STEP1_LIFT_DOWN] = new QState();
-	m_states[ST_STEP1_GRIP_OPEN] = new QState();
-	m_states[ST_STEP1_LIFT_UP] = new QState();
-	m_states[ST_STEP2_MASK_MOVE] = new QState();
-	m_states[ST_STEP2_MASK_DOWN] = new QState();
-	m_states[ST_STEP2_MASK_GRIP] = new QState();
-	m_states[ST_STEP2_MASK_UP] = new QState();
-	m_states[ST_STEP3_SCAN] = new QState();
-	m_states[ST_STEP4_MASK_DOWN] = new QState();
-	m_states[ST_STEP4_MASK_GRIP] = new QState();
-	m_states[ST_STEP4_MASK_UP] = new QState();
-	m_states[ST_STEP5_LIFT_DOWN] = new QState();
-	m_states[ST_STEP5_GRIP_CLOSE] = new QState();
-	m_states[ST_STEP5_LIFT_UP] = new QState();
-	m_states[ST_COMPLETED] = new QFinalState();
-	m_states[ST_PAUSED] = new QState();
-	m_states[ST_ERROR] = new QState();
+	//m_states[ST_IDLE] = new QState();
+	//m_states[ST_STEP1_LIFT_DOWN] = new QState();
+	//m_states[ST_STEP1_GRIP_OPEN] = new QState();
+	//m_states[ST_STEP1_LIFT_UP] = new QState();
+	//m_states[ST_STEP2_MASK_MOVE] = new QState();
+	//m_states[ST_STEP2_MASK_DOWN] = new QState();
+	//m_states[ST_STEP2_MASK_GRIP] = new QState();
+	//m_states[ST_STEP2_MASK_UP] = new QState();
+	//m_states[ST_STEP3_SCAN] = new QState();
+	//m_states[ST_STEP4_MASK_DOWN] = new QState();
+	//m_states[ST_STEP4_MASK_GRIP] = new QState();
+	//m_states[ST_STEP4_MASK_UP] = new QState();
+	//m_states[ST_STEP5_LIFT_DOWN] = new QState();
+	//m_states[ST_STEP5_GRIP_CLOSE] = new QState();
+	//m_states[ST_STEP5_LIFT_UP] = new QState();
+	//m_states[ST_COMPLETED] = new QFinalState();
+	//m_states[ST_PAUSED] = new QState();
+	//m_states[ST_ERROR] = new QState();
 
-	// 设置初始状态
-	m_machine.setInitialState(m_states[ST_IDLE]);
+	//// 设置初始状态
+	//m_machine.setInitialState(m_states[ST_IDLE]);
 
-	// 添加状态到状态机
-	for (auto state : m_states) {
-		m_machine.addState(state);
-	}
+	//// 添加状态到状态机
+	//for (auto state : m_states) {
+	//	m_machine.addState(state);
+	//}
 
-	// 设置状态转换
-	setupTransitions();
+	//// 设置状态转换
+	//setupTransitions();
 
-	// 启动状态机
-	m_machine.start();
+	//// 启动状态机
+	//m_machine.start();
 }
 
 bool Controller::initalize(short deviceNo)
@@ -72,25 +69,25 @@ bool Controller::initalize(short deviceNo)
 	short ret = NMC_DevOpen(deviceNo, &devHandle);
 	if (ret != RTN_CMD_SUCCESS)
 	{
-		logError("NMC_DevOpen", ret);
+		logError("NMC_DevOpen ", ret);
 	}
 	ret = NMC_EcatLoadConfigFromFile(devHandle, const_cast<char*> (myGml), 0);
 	if (ret != RTN_CMD_SUCCESS)
 	{
-		logError("NMC_EcatLoadConfigFromFile", ret);
+		logError("NMC_EcatLoadConfigFromFile ", ret);
 	}
 	ret = NMC_EcatStart(devHandle);
 	if (ret != RTN_CMD_SUCCESS)
 	{
-		logError("NMC_EcatStart", ret);
+		logError("NMC_EcatStart ", ret);
 	}
 	unsigned short ecatSts;
-	while (true) {
+	while (0) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		NMC_EcatGetSts(devHandle, &ecatSts);
 		if (ecatSts == 0x0) break;
 	}
-	axes.push_back(Axis(devHandle,16,245000,20));//0  上相机
+	axes.push_back(Axis(devHandle, 16, 245000,20));//0  上相机
 	axes.push_back(Axis(devHandle, 17, 295000, 20));//1  下相机
 	axes.push_back(Axis(devHandle,18,1450000,40));//2  搬运
 	axes.push_back(Axis(devHandle,19,1450000,40));//3 搬运
@@ -120,10 +117,15 @@ bool Controller::initalize(short deviceNo)
 
 void Controller::caseUp()
 {
-	logInfo("clicked caseUp button");
+	logInfo("start caseUP!");
+	if(!axesSts[2].negativeLimit || !axesSts[3].negativeLimit) // 判断搬运轴是否在负限位
+	{
+		logError("caseUp failed, axis 2 or 3 not at negative limit");
+		return;
+	}
 	axes[4].side2side(0);
-	axes[5].side2side(0);
 	while (!(axesSts[4].negativeLimit) || !(axesSts[5].negativeLimit))
+
 	{
 		if (stopRequested)	return;
 		QThread::msleep(200);
@@ -182,22 +184,81 @@ void Controller::maskUp()
 	}
 }
 
+void Controller::maskDetect()
+{
+	// 抬升未到位
+	if (!axesSts[10].positiveLimit && !axesSts[11].positiveLimit) {
+		logError("maskDetect failed, axis 10 or 11 not at positive limit");
+		return;
+	}
+	logInfo("start maskDetect!");
+	if(maskSize)
+	{
+		circleCount = 11;
+		axes[2].move(-210000);
+	}
+	else
+	{
+		circleCount = 12;
+		axes[2].move(-154033);
+	}
+
+	if(detectMode == MODE_DETECT_ClEAN_DETECT || detectMode == MODE_DETECT)
+	{
+		camera();
+	}
+
+
+}
+
+void Controller::camera()
+
+{
+	for(int i = 0; i < circleCount; i++)
+	{
+		axes[2].move(-49850);
+		while (axesSts[2].isMoving)
+		{
+			QThread::msleep(200);
+		}
+		//打开灯光相机拍摄
+		axes[0].side2side(1);
+		while (!axesSts[0].positiveLimit)
+		{
+			QThread::msleep(200);
+		}
+		axes[0].side2side(0);
+		while (!axesSts[0].negativeLimit)
+		{
+			QThread::msleep(200);
+		}
+	}
+	
+}
+
 
 void Controller::caseDown()
+
 {
+	logInfo("start caseDown!");
+	if(!axesSts[2].negativeLimit && !axesSts[3].negativeLimit) // 判断搬运轴是否在负限位
+	{
+		logError("caseDown failed, axis 2 or 3 not at negative limit");
+		return;
+	}
 	stopRequested = false;
 	axes[4].side2side(0);
 	axes[5].side2side(0);
-	while (!(axesSts[4].negativeLimit)|| !(axesSts[5].negativeLimit))
+	while (!(axesSts[4].negativeLimit) &&!(axesSts[5].negativeLimit))
 	{
 		if (stopRequested)	return;
 		QThread::msleep(200);
 	}
+	//收夹爪
 	axes[6].side2side(0);
 	axes[7].side2side(0);
 	axes[8].side2side(0);
 	axes[9].side2side(0);
-
 	while (!(axesSts[6].negativeLimit)|| !(axesSts[7] .negativeLimit)|| !(axesSts[8] .negativeLimit)|| !(axesSts[9].negativeLimit))
 	{
 		if (stopRequested) return;
@@ -234,16 +295,27 @@ void Controller::svOff()
 
 Controller::~Controller()
 {
+	stopTogether();
 	stop();
 	svOff();
 	delete timer;
 }
 
+/// @brief 自动运行
 void  Controller::autoRun()
 {
+	if(!areAllAxesInInitialState())
+	{
+		logError("autoRun failed, axes not in initial state");
+		return;
+	}
 	caseUp();
 	maskUp();
+	maskDetect();
+	caseDown();
 }
+
+/// @brief 刷新轴状态
 void Controller::flashAxisStaus()
 {
 	while (true)
@@ -259,4 +331,79 @@ void Controller::flashAxisStaus()
 			axesSts[i].hasError = (axsiSts & (1 << 10)) == 0 ? false : true;//取bit10,驱动器是否报警
 		}
 	}
+}
+
+/// @brief 判断所有轴是否在初始状态
+/// @return 
+bool Controller::areAllAxesInInitialState() {
+    for (int i = 0; i < axesSts.size(); ++i) {
+        if ((i == 4 || i == 5 || i == 10 || i == 11)) {
+
+            // 轴 4, 5, 10, 11 应该在正限位
+            if (!axesSts[i].positiveLimit) {
+                return false;
+            }
+        } else {
+            // 其他轴应该在负限位
+            if (!axesSts[i].negativeLimit) {
+                return false;
+            }
+        }
+    }
+    return true; // 所有轴都在期望的限位，返回 true
+}
+
+/// @brief 设置龙门组
+/// @return 
+bool Controller::together()
+{
+	short ret = NMC_SetGantryMaster(axes[2].getHandle(),1);
+	if(ret != RTN_CMD_SUCCESS)
+	{
+		logError("NMC_SetGantryMaster 0-1", ret);
+		return false;
+	}
+	ret = NMC_SetGantrySlave(axes[3].getHandle(),1,2000);
+	if(ret != RTN_CMD_SUCCESS)
+
+	{
+		logError("NMC_SetGantrySlave 2-3", ret);
+		return false;
+	}
+
+	ret = NMC_SetGantryMaster(axes[4].getHandle(),2);
+	if(ret != RTN_CMD_SUCCESS)
+	{
+		logError("NMC_SetGantryMaster 4-5", ret);
+		return false;
+	}
+	ret = NMC_SetGantrySlave(axes[5].getHandle(),2,2000);
+	if(ret != RTN_CMD_SUCCESS)
+
+	{
+		logError("NMC_SetGantrySlave 4-5", ret);
+		return false;
+	}
+
+	ret = NMC_SetGantryMaster(axes[10].getHandle(),3);
+	if(ret != RTN_CMD_SUCCESS)
+	{
+		logError("NMC_SetGantryMaster 10-11", ret);
+		return false;
+	}
+	ret = NMC_SetGantrySlave(axes[11].getHandle(),3,2000);
+	if(ret != RTN_CMD_SUCCESS)
+	{
+		logError("NMC_SetGantrySlave 10-11", ret);
+		return false;
+	}
+	return true;
+}
+
+/// @brief 停止龙门组
+void Controller::stopTogether()
+{
+	NMC_DelGantryGroup(axes[2].getHandle(),1);
+	NMC_DelGantryGroup(axes[4].getHandle(),2);
+	NMC_DelGantryGroup(axes[10].getHandle(),3);
 }

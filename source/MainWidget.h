@@ -3,9 +3,9 @@
 #include <QtConcurrent/qtconcurrentrun.h>
 #include <qgroupbox.h>
 
-#include "Logger.h"
+#include "./log/Logger.h"
 #include "TitleWidget.h"
-#include "Controller.h"
+#include "controller/Controller.h"
 class MainWidget :public QMainWindow
 {
 	Q_OBJECT

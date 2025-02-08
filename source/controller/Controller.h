@@ -7,7 +7,7 @@
 #include <thread>
 #include <qstatemachine.h>
 #include "Axis.h"
-#include "Logger.h"
+#include "../log/Logger.h"
 class Controller : public QObject
 {
 	Q_OBJECT
@@ -16,13 +16,15 @@ private:
 	std::vector<Axis> axes;
 	std::vector<AxisStatus> axesSts;
 	std::atomic<bool> stopRequested;
-	const char* myGml = "D://Test//Clean//singal_final.gml";
+	const char* myGml = "../singal_final.gml";
 public:
 	explicit Controller(QObject* parent = nullptr);
 	void setupStateMachine();
 	bool initalize(short deviceNo);
 	~Controller();
 
+signals:
+	void errorOccured(const std::string& msg);
 
 public slots:
 	bool  backHome();   //回原点
@@ -32,7 +34,7 @@ public slots:
 	void stop(); //停止
 	void svOff(); //断所有使能
 	void autoRun();  //自动流程
-
+	void maskDetect(); //检测
 private:
 	enum ProcessState {
 		ST_IDLE,            // 空闲状态
@@ -56,21 +58,36 @@ private:
 	};
 	ProcessState currentState;
 
-	void checkStatus();
-	void flashAxisStaus();
+	bool maskSize; //0 小 1 大
+	enum detectMode{
+		MODE_DETECT,
+		MODE_DETECT_ClEAN_DETECT,
+		MODE_CLEAN_DETECT
+	};
+	detectMode detectMode;
+	int circleCount;
 	QTimer* timer;
 
+
+	void checkStatus();
+	void flashAxisStaus();
+	void camera();
 	void logError(const std::string& functionName, short errorCode) {
 		std::string errmsg = functionName + "failed with error code " + std::to_string(errorCode);
 		lg::Logger::instance().Error(errmsg.c_str());
+		emit errorOccured(errmsg);
 	}
 	void logError(const std::string msg)
 	{
 		lg::Logger::instance().Error(msg.c_str());
+		emit errorOccured(msg);
 	}	
 	void logInfo(const std::string msg)
 	{
 		lg::Logger::instance().Info(msg.c_str());
 	}
 
+	bool together();
+	void stopTogether();
+	bool areAllAxesInInitialState();
 };

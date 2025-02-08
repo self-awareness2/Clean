@@ -23,53 +23,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <None Include="source\final.gml" />
+    <None Include="source\singal_final.gml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\main.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainWidget.cpp">
+    <ClCompile Include="source\MainWidget.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TitleWidget.cpp">
+    <ClCompile Include="source\PushButton.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PushButton.cpp">
+    <ClCompile Include="source\TitleWidget.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Axis.cpp">
+    <ClCompile Include="source\controller\Axis.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IO.cpp">
+    <ClCompile Include="source\controller\Controller.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
+    <ClCompile Include="source\controller\IO.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Logger.cpp">
+    <ClCompile Include="source\log\Logger.cpp">
       <Filter>Resource Files\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MainWidget.h">
+    <QtMoc Include="source\MainWidget.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="TitleWidget.h">
+    <QtMoc Include="source\PushButton.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="PushButton.h">
+    <QtMoc Include="source\TitleWidget.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Controller.h">
+    <QtMoc Include="source\controller\Controller.h">
       <Filter>Resource Files\Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Axis.h">
+    <ClInclude Include="source\controller\Axis.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IO.h">
+    <ClInclude Include="source\controller\IO.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
+    <ClInclude Include="source\log\Logger.h">
       <Filter>Resource Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

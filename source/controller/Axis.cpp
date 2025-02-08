@@ -72,21 +72,25 @@ bool Axis::side2side(bool direction)
 	moveTo(direction?distance:-distance, maxV, 0.1, 0.05);
 	return false;
 }
-
+// 绝对运动
 bool Axis::moveTo(long targetPosition, double velocity, double acceleration, double deceleration)
 {
-	if (!isInitialized)
-	{
-		lg::Logger::instance().Error("Axis not initialized!");
-		return 0;
-	}
-	short ret = NMC_MtMovePtpRel(axisHandle, acceleration, deceleration, 0, 0, velocity, 0,targetPosition);
+	short ret = NMC_MtMovePtpAbs(axisHandle, acceleration, deceleration, 0, 0, velocity, 0,targetPosition);
 	return handleResult(ret, "NMC_MtMovePtpAbs");
+}
+
+// 相对运动
+bool Axis::move(long targetDistance)
+{
+	short ret = NMC_MtMovePtpRel(axisHandle, 0.1, 0.1, 0, 0, maxV, 0, targetDistance);
+	return handleResult(ret, "NMC_MtMovePtpRel");
 }
 
 
 
+
 void Axis::stop()
+
 {
 		NMC_MtStop(axisHandle);
 }

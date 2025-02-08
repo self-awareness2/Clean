@@ -5,7 +5,7 @@
 #include "mtn_lib20_ext.h"
 #include "mtn_lib20_oem.h"
 #include <iostream>
-#include "Logger.h"
+#include "../log/Logger.h"
 
 struct AxisStatus {
     bool positiveLimit;  // 正限位
@@ -52,8 +52,12 @@ public:
     // 点位运动（绝对位置）
     bool moveTo(long targetPosition, double velocity, double acceleration, double deceleration);
 
+    // 点位运动（相对位置）
+    bool move(long targetDistance);
+
     // 停止运动
     void stop();
+
 
     void svOff();
 
