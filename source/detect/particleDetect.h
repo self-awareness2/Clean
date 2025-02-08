@@ -1,11 +1,10 @@
 #include <opencv2/opencv.hpp>
 #include <QObject> 
-#include <QThread>
+#include <vector>
+#include <mutex>
 #include "log/Logger.h"
-
-
-
-
+#include <atomic>
+#include "common/ThreadPool.h"
 
 class ParticleDetect
 {
