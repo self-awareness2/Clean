@@ -4,7 +4,7 @@
 #include <mutex>
 #include "log/Logger.h"
 #include <atomic>
-#include "common/ThreadPool.h"
+#include "../common/ThreadPool.h"
 
 class ParticleDetect
 {

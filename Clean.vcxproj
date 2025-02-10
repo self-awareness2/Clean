@@ -20,6 +20,7 @@
     <None Include="source\singal_final.gml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\common\ThreadPool.cpp" />
     <ClCompile Include="source\controller\Axis.cpp" />
     <ClCompile Include="source\controller\Controller.cpp" />
     <ClCompile Include="source\controller\IO.cpp" />
@@ -28,6 +29,7 @@
     <ClCompile Include="source\UI\MainWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\common\ThreadPool.h" />
     <ClInclude Include="source\controller\Axis.h" />
     <ClInclude Include="source\controller\IO.h" />
     <ClInclude Include="source\log\Logger.h" />
