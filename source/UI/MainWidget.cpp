@@ -10,10 +10,11 @@ MainWidget::MainWidget(QWidget* parent)
 {
     lg::Logger::instance().init("CleanLog"); // 初始化日志系统
     lg::Logger::instance().Info("App Start!");
-
+	qRegisterMetaType<Controller::ProcessState>("Controller::ProcessState");
 
     setMinimumSize(1200, 900);
     a = new QPushButton(QString::fromLocal8Bit("抬盖"), this);
+	b = new QPushButton(QString::fromLocal8Bit("回家"), this);
     c = new QPushButton(QString::fromLocal8Bit("合盖"), this);
     stop = new QPushButton(QString::fromLocal8Bit("停止"), this);
     test = new QPushButton(QString::fromLocal8Bit("运行测试"), this);
@@ -37,6 +38,7 @@ MainWidget::MainWidget(QWidget* parent)
 	QThread* controllerThread = new QThread(this);
 	controller = new Controller();
 	connect(a, &QPushButton::clicked, controller, [&]() {QtConcurrent::run(controller, &Controller::caseUp);});
+	connect(b, &QPushButton::clicked, controller, [&]() {QtConcurrent::run(controller, &Controller::backHome);});
 	connect(c, &QPushButton::clicked, controller, [&]() {QtConcurrent::run(controller, &Controller::caseDown);});
 	connect(test, &QPushButton::clicked, controller, [&]() {QtConcurrent::run(controller, &Controller::autoRun);});
 	connect(stop, &QPushButton::clicked, controller, &Controller::stop);
@@ -89,4 +91,6 @@ void MainWidget::stepChanged(short step)
 
 MainWidget::~MainWidget()
 {
+	delete controller;
+	lg::Logger::instance().Info("App End!");
 }

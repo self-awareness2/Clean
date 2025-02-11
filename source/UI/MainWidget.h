@@ -22,6 +22,7 @@ public slots:
 	void stepChanged(short step);
 private:
 	QPushButton *a;
+	QPushButton* b;
     QPushButton *c;
     QPushButton *stop;
     QPushButton *test;

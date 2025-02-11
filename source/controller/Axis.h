@@ -79,7 +79,7 @@ private:
     }
     // 内部函数：打印错误
     void logError(const std::string& functionName, short errorCode) {
-        std::string errmsg =functionName + "failed with error code " + std::to_string(errorCode);
+        std::string errmsg ="AxisId : "+std::to_string(axisID) + functionName + "failed with error code " + std::to_string(errorCode);
         lg::Logger::instance().Error(errmsg.c_str());
     }
 };

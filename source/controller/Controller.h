@@ -54,7 +54,7 @@ private:
 		MODE_DETECT_ClEAN_DETECT,
 		MODE_CLEAN_DETECT
 	};
-	detectMode detectMode;
+	detectMode detectMode = MODE_DETECT;
 	int circleCount;
 	void flashAxisStaus();
 	void camera();
